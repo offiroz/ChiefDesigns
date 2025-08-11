@@ -4,6 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chief Designs - עיצוב גרפי מקצועי</title>
+    
+    <!-- Microsoft Clarity -->
+        <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "ssi5g800j7");
+        </script>
     <style>
         * {
             margin: 0;
@@ -256,6 +265,138 @@
             line-height: 1.8;
         }
 
+        /* Portfolio Styles */
+        .portfolio-featured {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-top: 50px;
+            align-items: center;
+        }
+
+        .portfolio-featured-content {
+            padding: 40px 0;
+        }
+
+        .portfolio-featured-content h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #333;
+            position: relative;
+        }
+
+        .portfolio-featured-content h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #e75480, #de4f6e);
+            border-radius: 2px;
+        }
+
+        .portfolio-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #e75480, #de4f6e);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .portfolio-description {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+
+        .portfolio-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tech-tag {
+            background: #f8f9fa;
+            color: #666;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            border: 2px solid #e9ecef;
+        }
+
+        .portfolio-visual {
+            height: 500px;
+            background: linear-gradient(135deg, #e75480 0%, #de4f6e 100%);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .portfolio-visual::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .portfolio-preview {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+            padding: 40px;
+        }
+
+        .preview-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .preview-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .preview-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .view-project-btn {
+            display: inline-block;
+            background: white;
+            color: #de4f6e;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .view-project-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
         .portfolio-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -278,13 +419,19 @@
 
         .portfolio-image {
             height: 250px;
-            background: linear-gradient(135deg, #e75480, #de4f6e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-            font-weight: bold;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .portfolio-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .portfolio-item:hover .portfolio-image img {
+            transform: scale(1.05);
         }
 
         .portfolio-content {
@@ -300,6 +447,18 @@
         .portfolio-content p {
             color: #666;
             line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .portfolio-link {
+            color: #de4f6e;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .portfolio-link:hover {
+            color: #c44569;
         }
 
         .about-section {
@@ -485,7 +644,7 @@
                 <img src="https://offiroz.github.io/ChiefDesigns/Chief%20Desings%20Logo%20without%20text.png" alt="Chief Designs Logo" />
             </div>
             <h1>Chief Designs</h1>
-            <p>לא בונים, מעצבים.</p>
+            <p>לא בונים אתרים, מעצבים.</p>
             <a href="#contact" class="cta-button">בואו נתחיל</a>
         </div>
     </section>
@@ -520,26 +679,61 @@
     <!-- Portfolio Section -->
     <section class="section" id="portfolio">
         <h2>תיק עבודות</h2>
+        
+        <!-- Portfolio Grid with Real Images -->
         <div class="portfolio-grid">
             <div class="portfolio-item">
-                <div class="portfolio-image">פרויקט אתר מסחר</div>
+                <div class="portfolio-image">
+                    <img src="https://github.com/offiroz/web-assets/blob/main/screenshots/name-changer.png?raw=true" alt="כלי החלפת שמות">
+                </div>
                 <div class="portfolio-content">
-                    <h3>אתר מסחר אלקטרוני</h3>
-                    <p>עיצוב  אתר מסחר מלא עם מערכת תשלומים מתקדמת וחוויית קנייה חלקה.</p>
+                    <h3>כלי החלפת שמות - כפר תקווה</h3>
+                    <p>כלי מתקדם להגנה על פרטיות עם תמיכה רב-לשונית. עובד במחשב המקומי ללא שליחת מידע לחוץ.</p>
+                    <a href="https://offiroz.github.io/name-remover-tool/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
                 </div>
             </div>
+
             <div class="portfolio-item">
-                <div class="portfolio-image">פרויקט מיתוג</div>
+                <div class="portfolio-image">
+                    <img src="https://github.com/offiroz/web-assets/blob/main/screenshots/offirsjam.png?raw=true" alt="אופיר מורה לנגינה">
+                </div>
                 <div class="portfolio-content">
-                    <h3>מיתוג חברת טכנולוגיה</h3>
-                    <p>פיתוח זהות מותג מלאה כולל לוגו, צבעים, טיפוגרפיה ומערכת עיצוב אחידה.</p>
+                    <h3>אתר תדמית למורה לנגינה</h3>
+                    <p>בניית אתר תדמית מקצועי כולל מקום להעלאת חומרים אישיים, סרטונים ומקום עתידי להעלאת גיטרות ושיפוץ.</p>
+                    <a href="https://offiroz.github.io/offirsjam/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
                 </div>
             </div>
+
             <div class="portfolio-item">
-                <div class="portfolio-image">פרויקט אפליקציה</div>
+                <div class="portfolio-image">
+                    <img src="https://github.com/offiroz/web-assets/blob/main/screenshots/carmelmagazin.png?raw=true" alt="מגזין חודשי">
+                </div>
                 <div class="portfolio-content">
-                    <h3>אפליקציית מובייל</h3>
-                    <p>עיצוב UI/UX לאפליקציית מובייל חדשנית עם דגש על חוויית משתמש אינטואיטיבית.</p>
+                    <h3>מגזין חודשי אינטראקטיבי</h3>
+                    <p>יצירת מגזין חודשי מותאם לאנשים עם צרכים מיוחדים, כולל משחקים דיגיטליים וגרסה להדפסה.</p>
+                    <a href="https://offiroz.github.io/Carmel-magzine/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                </div>
+            </div>
+
+            <div class="portfolio-item">
+                <div class="portfolio-image">
+                    <img src="https://github.com/offiroz/web-assets/blob/main/screenshots/cookbook.png?raw=true" alt="ספר מתכונים">
+                </div>
+                <div class="portfolio-content">
+                    <h3>ספר מתכונים לפיצה נפוליטנית</h3>
+                    <p>ספר מעוצב עם מתכונים לטאבון COZZE, כולל תמונות מעובדות ב-AI ואווירה קלילה וקומית.</p>
+                    <a href="https://offiroz.github.io/cozze-pizza-oven/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                </div>
+            </div>
+
+            <div class="portfolio-item">
+                <div class="portfolio-image">
+                    <img src="https://github.com/offiroz/web-assets/blob/main/screenshots/hafakothafakot.png?raw=true" alt="הפקות הפקות">
+                </div>
+                <div class="portfolio-content">
+                    <h3>מערכת אישורי הגעה לאירועים</h3>
+                    <p>אתר ומערכת מלאה לניהול ואישור הגעה לאירועים, עם ממשק ידידותי למארגנים ולמוזמנים.</p>
+                    <a href="https://offiroz.github.io/hafakot-hafakot/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
                 </div>
             </div>
         </div>
@@ -565,6 +759,9 @@
     <section class="section contact-section" id="contact">
         <div class="contact-content">
             <h2>בואו נתחיל לעבוד יחד</h2>
+            <h3>050-2410616</h3>
+            <h3>offiroz@gmail.com</h3>
+
             <p>מוכנים להפוך את החזון שלכם למציאות? צרו קשר עכשיו ובואו נגלוש יחד לעבר הצלחה דיגיטלית.</p>
             
             <form class="contact-form">
