@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chief Designs - עיצוב גרפי מקצועי</title>
     
-    <!-- Microsoft Clarity -->
-        <script type="text/javascript">
-        (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "ssi5g800j7");
-        </script>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17466147922"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-17466147922');
+    </script>
+    
     <style>
         * {
             margin: 0;
@@ -617,6 +618,173 @@
                 grid-template-columns: 1fr;
             }
         }
+
+            .cookie-banner {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                border-top: 3px solid;
+                border-image: linear-gradient(135deg, #e75480, #de4f6e) 1;
+                box-shadow: 0 -10px 30px rgba(0,0,0,0.15);
+                z-index: 10000;
+                transform: translateY(100%);
+                transition: transform 0.4s ease-out;
+                backdrop-filter: blur(10px);
+            }
+
+            .cookie-banner.show {
+                transform: translateY(0);
+            }
+
+            .cookie-banner-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 25px 20px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 20px;
+            }
+
+            .cookie-text {
+                flex: 1;
+                color: #333;
+                line-height: 1.6;
+            }
+
+            .cookie-text h3 {
+                font-size: 1.3rem;
+                margin-bottom: 8px;
+                color: #de4f6e;
+                font-weight: bold;
+            }
+
+            .cookie-text p {
+                font-size: 1rem;
+                margin-bottom: 0;
+            }
+
+            .cookie-text a {
+                color: #de4f6e;
+                text-decoration: none;
+                font-weight: 500;
+                transition: color 0.3s ease;
+            }
+
+            .cookie-text a:hover {
+                color: #c44569;
+                text-decoration: underline;
+            }
+
+            .cookie-actions {
+                display: flex;
+                gap: 15px;
+                flex-shrink: 0;
+            }
+
+            .cookie-btn {
+                padding: 12px 25px;
+                border: none;
+                border-radius: 25px;
+                font-size: 1rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                text-decoration: none;
+                display: inline-block;
+                text-align: center;
+                min-width: 120px;
+            }
+
+            .cookie-btn-accept {
+                background: linear-gradient(135deg, #e75480, #de4f6e);
+                color: white;
+                box-shadow: 0 5px 15px rgba(222, 79, 110, 0.3);
+            }
+
+            .cookie-btn-accept:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(222, 79, 110, 0.4);
+            }
+
+            .cookie-btn-decline {
+                background: transparent;
+                color: #666;
+                border: 2px solid #ddd;
+            }
+
+            .cookie-btn-decline:hover {
+                background: #f8f9fa;
+                border-color: #ccc;
+                transform: translateY(-2px);
+            }
+
+            /* Success Message */
+            .success-message {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #28a745, #20c997);
+                color: white;
+                padding: 15px 25px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+                z-index: 10002;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+            }
+
+            .success-message.show {
+                transform: translateX(0);
+            }
+
+            /* Privacy Links in Footer */
+            .privacy-links {
+                margin-top: 15px;
+                font-size: 0.9rem;
+            }
+
+            .privacy-links a {
+                color: #ccc;
+                text-decoration: none;
+                margin: 0 10px;
+                transition: color 0.3s ease;
+            }
+
+            .privacy-links a:hover {
+                color: #de4f6e;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                .cookie-banner-content {
+                    flex-direction: column;
+                    text-align: center;
+                    gap: 20px;
+                }
+
+                .cookie-actions {
+                    width: 100%;
+                    justify-content: center;
+                    flex-wrap: wrap;
+                }
+
+                .cookie-btn {
+                    flex: 1;
+                    min-width: 140px;
+                }
+
+                .privacy-links {
+                    text-align: center;
+                }
+
+                .privacy-links a {
+                    display: inline-block;
+                    margin: 5px 10px;
+                }
+            }
     </style>
 </head>
 <body>
@@ -789,9 +957,89 @@
             <a href="#">LinkedIn</a>
             <a href="#">Behance</a>
         </div>
+        
+        <div class="privacy-links">
+            <a href="/privacy.html">מדיניות פרטיות</a>
+            <a href="#" onclick="showCookieBanner()">הגדרות עוגיות</a>
+            <a href="/terms.html">תנאי שימוש</a>
+        </div>
     </footer>
-
     <script>
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = name + '=' + value + ';expires=' + expires.toUTCString() + ';path=/';
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function showCookieBanner() {
+            document.getElementById('cookieBanner').classList.add('show');
+        }
+
+        function hideCookieBanner() {
+            document.getElementById('cookieBanner').classList.remove('show');
+        }
+
+        function acceptCookies() {
+            setCookie('cookie-consent', 'accepted', 365);
+            
+            // הפעל את Microsoft Clarity
+            initializeClarityTracking();
+            
+            hideCookieBanner();
+            showSuccessMessage();
+        }
+
+        function declineCookies() {
+            setCookie('cookie-consent', 'declined', 365);
+            hideCookieBanner();
+            showSuccessMessage();
+        }
+
+        function showSuccessMessage() {
+            const message = document.getElementById('successMessage');
+            message.classList.add('show');
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 3000);
+        }
+
+        function initializeClarityTracking() {
+            // Microsoft Clarity - יעבוד רק אחרי הסכמה
+            (function(c,l,a,r,i,t,y){
+                c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "ssi5g800j7");
+            
+            console.log('📊 Microsoft Clarity activated');
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const consent = getCookie('cookie-consent');
+            
+            if (!consent) {
+                // אין הסכמה - הצג באנר אחרי שנייה
+                setTimeout(showCookieBanner, 1000);
+            } else if (consent === 'accepted') {
+                // יש הסכמה - הפעל tracking
+                initializeClarityTracking();
+            }
+            // אם declined - לא עושה כלום
+        });
+
+        // הוסף event listeners קיימים (נשמר הקוד הישן שלך)
         // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const navbar = document.getElementById('navbar');
@@ -846,5 +1094,33 @@
             observer.observe(el);
         });
     </script>
+
+        <!-- Cookie Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-banner-content">
+            <div class="cookie-text">
+                <h3>🍪 אנחנו משתמשים בעוגיות</h3>
+                <p>
+                    אנו משתמשים בעוגיות כדי לשפר את החוויה שלך באתר ולנתח את השימוש בו. 
+                    <a href="#" onclick="showCookieBanner()">ניהול הגדרות</a> או 
+                    <a href="/privacy" target="_blank">מדיניות פרטיות</a>
+                </p>
+            </div>
+            <div class="cookie-actions">
+                <button class="cookie-btn cookie-btn-decline" onclick="declineCookies()">
+                    לא תודה
+                </button>
+                <button class="cookie-btn cookie-btn-accept" onclick="acceptCookies()">
+                    אני מסכים
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message -->
+    <div id="successMessage" class="success-message">
+        ההגדרות נשמרו בהצלחה! ✓
+    </div>
+
 </body>
 </html>
