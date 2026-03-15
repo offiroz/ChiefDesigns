@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chief Designs | בוט וואטסאפ חכם לעסקים</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;800;900&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pink: #E75480;
+            --dark-pink: #DE4F6E;
+            --orange: #FE9920;
+            --dark-blue: #273E47;
+            --deep: #0F1923;
+            --glass: rgba(255,255,255,0.06);
+            --glass-border: rgba(255,255,255,0.1);
+            --glow-pink: rgba(231,84,128,0.3);
+            --glow-orange: rgba(254,153,32,0.2);
+            --text: #E8EDF2;
+            --text-muted: #8A9BB0;
+            --radius: 16px;
+            --radius-sm: 10px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: var(--deep);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
+        }
+        /* === ANIMATED BG === */
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+        }
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .bg-orb-1 { width: 600px; height: 600px; background: var(--glow-pink); top: -200px; right: -100px; opacity: 0.4; }
+        .bg-orb-2 { width: 500px; height: 500px; background: var(--glow-orange); bottom: -200px; left: -100px; opacity: 0.3; }
+        .bg-orb-3 { width: 400px; height: 400px; background: rgba(39,62,71,0.6); top: 50%; left: 50%; transform: translate(-50%,-50%); opacity: 0.5; }
+        /* === NAV === */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 16px 0;
+            background: rgba(15,25,35,0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        .nav-logo img { width: 36px; height: 36px; border-radius: 8px; }
+        .nav-logo span { font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--text); }
+        .nav-cta {
+            background: linear-gradient(135deg, var(--pink), var(--dark-pink));
+            color: white;
+            padding: 10px 24px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 30px var(--glow-pink); }
+        /* === HERO === */
+        .hero {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 120px 24px 80px;
+        }
+        .hero-content {
+            max-width: 800px;
+            text-align: center;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: var(--orange);
+            font-weight: 500;
+            margin-bottom: 32px;
+            animation: fadeUp 0.8s ease-out;
+        }
+        .hero-badge .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--orange); animation: pulse 2s infinite; }
+        .hero h1 {
+            font-family: 'Rubik', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.2rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            animation: fadeUp 0.8s ease-out 0.1s both;
+        }
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--pink), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            animation: fadeUp 0.8s ease-out 0.2s both;
+        }
+        .hero-actions {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeUp 0.8s ease-out 0.3s both;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pink), var(--dark-pink));
+            color: white;
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 40px var(--glow-pink); }
+        .btn-ghost {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            padding: 16px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-ghost:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+        /* === CHAT MOCKUP === */
+        .hero-visual {
+            margin-top: 60px;
+            animation: fadeUp 0.8s ease-out 0.4s both;
+        }
+        .chat-mockup {
+            max-width: 380px;
+            margin: 0 auto;
+            background: #ECE5DD;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+        .chat-header {
+            background: #075E54;
+            padding: 14px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: white;
+        }
+        .chat-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pink), var(--orange));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+        .chat-name { font-weight: 600; font-size: 0.95rem; }
+        .chat-status { font-size: 0.75rem; opacity: 0.8; }
+        .chat-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-height: 280px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect fill="%23ECE5DD"/><circle cx="20" cy="20" r="2" fill="%23d5cfc5" opacity="0.3"/><circle cx="100" cy="60" r="2" fill="%23d5cfc5" opacity="0.3"/><circle cx="160" cy="140" r="2" fill="%23d5cfc5" opacity="0.3"/></svg>') #ECE5DD;
+        }
+        .msg {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            max-width: 85%;
+            line-height: 1.5;
+            color: #111;
+            position: relative;
+        }
+        .msg-in { background: white; align-self: flex-start; border-top-right-radius: 4px; }
+        .msg-out { background: #DCF8C6; align-self: flex-end; border-top-left-radius: 4px; }
+        .msg-time { font-size: 0.65rem; color: #999; text-align: left; margin-top: 4px; }
+        .msg.typing .dots { display: inline-flex; gap: 4px; }
+        .msg.typing .dots span {
+            width: 6px; height: 6px; background: #999; border-radius: 50%;
+            animation: typing 1.4s infinite;
+        }
+        .msg.typing .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .msg.typing .dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+            30% { opacity: 1; transform: translateY(-4px); }
+        }
+        /* === SECTIONS === */
+        section { position: relative; z-index: 1; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-pad { padding: 100px 0; }
+        .section-title {
+            font-family: 'Rubik', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+        /* === FEATURES === */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 36px 28px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--pink), var(--orange));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .feature-card:hover { border-color: rgba(231,84,128,0.3); transform: translateY(-4px); }
+        .feature-card:hover::before { opacity: 1; }
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(231,84,128,0.15), rgba(254,153,32,0.1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 { font-family: 'Rubik', sans-serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+        /* === HOW IT WORKS === */
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            counter-reset: step;
+        }
+        .step {
+            text-align: center;
+            position: relative;
+        }
+        .step-num {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--pink), var(--dark-pink));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            box-shadow: 0 8px 30px var(--glow-pink);
+        }
+        .step h3 { font-family: 'Rubik', sans-serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 8px; }
+        .step p { color: var(--text-muted); font-size: 0.9rem; }
+        /* === PRICING === */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .price-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 40px 32px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .price-card.featured {
+            border-color: var(--pink);
+            background: linear-gradient(165deg, rgba(231,84,128,0.08), rgba(254,153,32,0.04));
+        }
+        .price-card.featured::before {
+            content: 'הכי פופולרי';
+            position: absolute;
+            top: -12px;
+            right: 24px;
+            background: linear-gradient(135deg, var(--pink), var(--orange));
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+        .price-card:hover { transform: translateY(-4px); }
+        .price-card h3 { font-family: 'Rubik', sans-serif; font-size: 1.3rem; font-weight: 700; margin-bottom: 8px; }
+        .price-card .desc { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+        .price-amount {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin-bottom: 8px;
+        }
+        .price-amount .number { font-family: 'Rubik', sans-serif; font-size: 3rem; font-weight: 800; }
+        .price-amount .currency { font-size: 1.2rem; color: var(--text-muted); }
+        .price-amount .period { font-size: 0.9rem; color: var(--text-muted); }
+        .price-launch {
+            display: inline-block;
+            background: rgba(254,153,32,0.15);
+            color: var(--orange);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+        .price-features { list-style: none; margin-bottom: 28px; }
+        .price-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .price-features li .check { color: var(--pink); font-weight: bold; }
+        .price-features li.disabled { opacity: 0.35; }
+        .price-features li.disabled .check { color: var(--text-muted); }
+        .price-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+        .price-btn-primary {
+            background: linear-gradient(135deg, var(--pink), var(--dark-pink));
+            color: white;
+        }
+        .price-btn-primary:hover { box-shadow: 0 8px 30px var(--glow-pink); transform: translateY(-2px); }
+        .price-btn-ghost {
+            background: transparent;
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+        }
+        .price-btn-ghost:hover { background: var(--glass); }
+        /* === PROOF === */
+        .proof-bar {
+            background: var(--glass);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 40px 24px;
+        }
+        .proof-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+        .proof-stat { text-align: center; }
+        .proof-stat .num {
+            font-family: 'Rubik', sans-serif;
+            font-size: 2.4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--pink), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .proof-stat .label { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+        /* === CTA === */
+        .cta-section {
+            padding: 100px 24px;
+            text-align: center;
+        }
+        .cta-box {
+            max-width: 700px;
+            margin: 0 auto;
+            background: linear-gradient(165deg, rgba(231,84,128,0.1), rgba(254,153,32,0.05));
+            border: 1px solid rgba(231,84,128,0.2);
+            border-radius: 24px;
+            padding: 60px 40px;
+        }
+        .cta-box h2 { font-family: 'Rubik', sans-serif; font-size: 2rem; font-weight: 800; margin-bottom: 16px; }
+        .cta-box p { color: var(--text-muted); margin-bottom: 32px; font-size: 1.05rem; }
+        .cta-contact {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        .cta-contact a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        .cta-contact a:hover { color: var(--pink); }
+        /* === FOOTER === */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer a { color: var(--pink); text-decoration: none; }
+        /* === ANIMATIONS === */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* === MOBILE === */
+        @media (max-width: 768px) {
+            .hero { padding: 100px 20px 60px; }
+            .hero h1 { font-size: 2.2rem; }
+            .hero-sub { font-size: 1.05rem; }
+            .hero-actions { flex-direction: column; align-items: center; }
+            .btn-primary, .btn-ghost { width: 100%; max-width: 300px; text-align: center; justify-content: center; }
+            .proof-inner { gap: 32px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+            .cta-box { padding: 40px 24px; }
+            .features-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="bg-orb bg-orb-1"></div>
+<div class="bg-orb bg-orb-2"></div>
+<div class="bg-orb bg-orb-3"></div>
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-logo">
+            <img src="https://offiroz.github.io/ChiefDesigns/Chief%20Desings%20Logo%20without%20text.png" alt="Chief Designs" />
+            <span>Chief Designs</span>
+        </a>
+        <a href="#pricing" class="nav-cta">מחירים והרשמה</a>
+    </div>
+</nav>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="dot"></span>
+            מחיר השקה מיוחד — 99₪ לחודש הראשון
+        </div>
+        <h1>הלקוחות שלך שולחים הודעה.<br><span class="gradient">הבוט שלך עונה מיד.</span></h1>
+        <p class="hero-sub">בוט וואטסאפ חכם עם בינה מלאכותית שעונה ללקוחות 24/7, אוסף לידים ושולח לך התראה על כל פנייה — גם כשאתה ישן.</p>
+        <div class="hero-actions">
+            <a href="#pricing" class="btn-primary">אני רוצה בוט לעסק שלי ←</a>
+            <a href="#how" class="btn-ghost">איך זה עובד?</a>
+        </div>
+        <div class="hero-visual">
+            <div class="chat-mockup">
+                <div class="chat-header">
+                    <div class="chat-avatar">CD</div>
+                    <div>
+                        <div class="chat-name">העסק שלך</div>
+                        <div class="chat-status">מקוון</div>
+                    </div>
+                </div>
+                <div class="chat-body" id="chatBody">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- PROOF BAR -->
+<div class="proof-bar reveal">
+    <div class="proof-inner">
+        <div class="proof-stat">
+            <div class="num">24/7</div>
+            <div class="label">זמינות ללקוחות</div>
+        </div>
+        <div class="proof-stat">
+            <div class="num">&lt;3 שנ׳</div>
+            <div class="label">זמן תגובה ממוצע</div>
+        </div>
+        <div class="proof-stat">
+            <div class="num">0</div>
+            <div class="label">לקוחות שנפלו מהרשת</div>
+        </div>
+        <div class="proof-stat">
+            <div class="num">100%</div>
+            <div class="label">התראות בזמן אמת</div>
+        </div>
+    </div>
+</div>
+<!-- FEATURES -->
+<section class="section-pad" id="features">
+    <div class="container">
+        <h2 class="section-title reveal">מה הבוט עושה בשבילך</h2>
+        <p class="section-subtitle reveal">כל מה שצריך כדי שלא תפסיד אף לקוח — באוטומט מלא</p>
+        <div class="features-grid">
+            <div class="feature-card reveal">
+                <div class="feature-icon">⚡</div>
+                <h3>מענה אוטומטי מיידי</h3>
+                <p>הלקוח שולח הודעה בוואטסאפ — ומקבל מענה תוך שניות. שעות פתיחה, מחירים, שאלות נפוצות — הכל אוטומטי.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">🧠</div>
+                <h3>בינה מלאכותית (AI)</h3>
+                <p>הבוט מבין מה הלקוח שואל ועונה בשפה טבעית — לא תפריטים מעצבנים, שיחה אמיתית שמרגישה אנושית.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">📊</div>
+                <h3>ניהול לידים אוטומטי</h3>
+                <p>כל פנייה נשמרת בגיליון Google Sheets מסודר — שם, טלפון, מה ביקש. אף ליד לא הולך לאיבוד.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">🔔</div>
+                <h3>התראות בזמן אמת</h3>
+                <p>מקבל התראה אישית על כל פנייה חדשה — ישירות לנייד שלך. תמיד יודע מה קורה.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">🎨</div>
+                <h3>מותאם אישית לעסק</h3>
+                <p>הבוט מדבר בשפה שלך, מכיר את השירותים שלך, ונותן תשובות מדויקות — לא גנרי.</p>
+            </div>
+            <div class="feature-card reveal">
+                <div class="feature-icon">📱</div>
+                <h3>עובד על הוואטסאפ שלך</h3>
+                <p>ללא אפליקציות נוספות, ללא מערכות מסובכות. הלקוחות שולחים הודעה רגילה בוואטסאפ — והבוט עונה.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- HOW IT WORKS -->
+<section class="section-pad" id="how">
+    <div class="container">
+        <h2 class="section-title reveal">איך מתחילים?</h2>
+        <p class="section-subtitle reveal">תהליך פשוט ומהיר — תוך ימים הבוט שלך באוויר</p>
+        <div class="steps">
+            <div class="step reveal">
+                <div class="step-num">1</div>
+                <h3>שיחת ייעוץ קצרה</h3>
+                <p>מבינים ביחד מה העסק שלך צריך, מה השאלות הנפוצות, ואיך הבוט יעבוד.</p>
+            </div>
+            <div class="step reveal">
+                <div class="step-num">2</div>
+                <h3>הקמה והתאמה</h3>
+                <p>אנחנו בונים את הבוט, מתאימים את התשובות, מחברים ל-WhatsApp שלך.</p>
+            </div>
+            <div class="step reveal">
+                <div class="step-num">3</div>
+                <h3>עולים לאוויר</h3>
+                <p>הבוט חי ועובד. אתה מקבל התראות על כל פנייה ויכול לעקוב בגיליון הלידים.</p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- PRICING -->
+<section class="section-pad" id="pricing">
+    <div class="container">
+        <h2 class="section-title reveal">מחירים שקופים, בלי הפתעות</h2>
+        <p class="section-subtitle reveal">בחר את המסלול שמתאים לעסק שלך. לכולם — חודש ראשון ב-99₪ בלבד.</p>
+        <div class="pricing-grid">
+            <!-- STARTER -->
+            <div class="price-card reveal">
+                <h3>סטארטר</h3>
+                <p class="desc">לעסק שרוצה מענה אוטומטי בסיסי</p>
+                <div class="price-amount">
+                    <span class="currency">₪</span>
+                    <span class="number">149</span>
+                    <span class="period">/ חודש</span>
+                </div>
+                <div class="price-launch">🔥 חודש ראשון רק 99₪</div>
+                <h3>תשלום חד פעמי 490₪</h3>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> מענה אוטומטי 24/7</li>
+                    <li><span class="check">✓</span> תמיכה</li>
+                    <li><span class="check">✓</span> בינה מלאכותית (AI)</li>
+                    <li><span class="check">✓</span> התראות אישיות</li>
+                    <li class="disabled"><span class="check">—</span> ניהול לידים (Sheets)</li>
+                    <li class="disabled"><span class="check">—</span> מערכת מותאמת אישית לעסק</li>
+                </ul>
+                <a href="#contact" class="price-btn price-btn-ghost">בואו נדבר</a>
+            </div>
+            <!-- BUSINESS -->
+            <div class="price-card featured reveal">
+                <h3>ביזנס</h3>
+                <p class="desc">לעסק שרוצה בוט חכם עם ניהול לידים</p>
+                <div class="price-amount">
+                    <span class="currency">₪</span>
+                    <span class="number">249</span>
+                    <span class="period">/ חודש</span>
+                </div>
+                <div class="price-launch">🔥 חודש ראשון רק 99₪</div>
+                <h3>תשלום חד פעמי 350₪</h3>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> מענה אוטומטי 24/7</li>
+                    <li><span class="check">✓</span> תמיכה</li>
+                    <li><span class="check">✓</span> בינה מלאכותית (AI)</li>
+                    <li><span class="check">✓</span> התראות אישיות</li>
+                    <li><span class="check">✓</span> ניהול לידים (Sheets)</li>
+                    <li class="disabled"><span class="check">—</span> מערכת מותאמת אישית לעסק</li>
+                </ul>
+                <a href="#contact" class="price-btn price-btn-primary">אני רוצה את זה ←</a>
+            </div>
+            <!-- PREMIUM -->
+            <div class="price-card reveal">
+                <h3>פרימיום</h3>
+                <p class="desc">חבילה מלאה + התראות + תמיכה מוקדשת</p>
+                <div class="price-amount">
+                    <span class="currency">₪</span>
+                    <span class="number">449</span>
+                    <span class="period">/ חודש</span>
+                </div>
+                <div class="price-launch">🔥 חודש ראשון רק 99₪</div>
+                <h3>ללא תשלום חד פעמי</h3>
+                <ul class="price-features">
+                    <li><span class="check">✓</span> מענה אוטומטי 24/7</li>
+                    <li><span class="check">✓</span> תמיכה</li>
+                    <li><span class="check">✓</span> בינה מלאכותית (AI)</li>
+                    <li><span class="check">✓</span> התראות אישיות</li>
+                    <li><span class="check">✓</span> ניהול לידים (Sheets)</li>
+                    <li><span class="check">✓</span> מערכת מותאמת אישית לעסק</li>
+                </ul>
+                <a href="#contact" class="price-btn price-btn-ghost">בואו נדבר</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- CTA -->
+<section class="cta-section" id="contact">
+    <div class="cta-box reveal">
+        <h2>מוכן שהעסק שלך<br>לא יפסיד אף לקוח?</h2>
+        <p>שלח הודעה או התקשר — ונתחיל לבנות לך בוט שעובד בשבילך 24/7.</p>
+        <a href="https://wa.me/972502410616?text=היי%20אופיר%2C%20אשמח%20לשמוע%20על%20הבוט%20לוואטסאפ" class="btn-primary" target="_blank">שלח הודעה בוואטסאפ ←</a>
+        <div class="cta-contact">
+            <a href="tel:0502410616">📞 050-2410616</a>
+            <a href="mailto:offiroz@gmail.com">✉ offiroz@gmail.com</a>
+            <a href="https://chiefdesigns.co.il" target="_blank">🌐 chiefdesigns.co.il</a>
+        </div>
+    </div>
+</section>
+<!-- FOOTER -->
+<footer>
+    <p>&copy; 2026 Chief Designs. כל הזכויות שמורות.</p>
+    <p style="margin-top:8px;">ממשיכים קדימה ביחד 💪</p>
+</footer>
+<script>
+// Reveal on scroll
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+// Chat animation
+const chatMessages = [
+    { type: 'out', text: 'היי, כמה עולה תספורת גבר?', delay: 800 },
+    { type: 'typing', delay: 1500 },
+    { type: 'in', text: 'היי! 👋 תספורת גבר אצלנו עולה 70₪. רוצה לקבוע תור?', delay: 600 },
+    { type: 'out', text: 'כן, יש מקום מחר בבוקר?', delay: 2000 },
+    { type: 'typing', delay: 1500 },
+    { type: 'in', text: 'בטח! יש מקום פנוי מחר ב-10:00 או ב-11:30. מה מתאים לך?', delay: 600 },
+    { type: 'out', text: '10:00 מעולה 👍', delay: 1800 },
+    { type: 'typing', delay: 1200 },
+    { type: 'in', text: 'נרשמת! מחכים לך מחר ב-10:00 ✅\nנשלח תזכורת שעה לפני.', delay: 500 },
+];
+const chatBody = document.getElementById('chatBody');
+let msgIndex = 0;
+let typingEl = null;
+function getTime() {
+    const now = new Date();
+    return now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+}
+function showNext() {
+    if (msgIndex >= chatMessages.length) return;
+    const msg = chatMessages[msgIndex];
+    if (msg.type === 'typing') {
+        typingEl = document.createElement('div');
+        typingEl.className = 'msg msg-in typing';
+        typingEl.innerHTML = '<div class="dots"><span></span><span></span><span></span></div>';
+        chatBody.appendChild(typingEl);
+        chatBody.scrollTop = chatBody.scrollHeight;
+        msgIndex++;
+        setTimeout(showNext, msg.delay);
+        return;
+    }
+    if (typingEl) { typingEl.remove(); typingEl = null; }
+    const el = document.createElement('div');
+    el.className = `msg msg-${msg.type}`;
+    el.innerHTML = msg.text.replace(/\n/g, '<br>') + `<div class="msg-time">${getTime()}</div>`;
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(10px)';
+    chatBody.appendChild(el);
+    requestAnimationFrame(() => {
+        el.style.transition = 'all 0.3s ease';
+        el.style.opacity = '1';
+        el.style.transform = 'translateY(0)';
+    });
+    chatBody.scrollTop = chatBody.scrollHeight;
+    msgIndex++;
+    if (msgIndex < chatMessages.length) {
+        setTimeout(showNext, msg.delay || 1000);
+    }
+}
+// Start chat animation when visible
+const heroObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+        setTimeout(showNext, 1000);
+        heroObserver.disconnect();
+    }
+}, { threshold: 0.3 });
+heroObserver.observe(document.querySelector('.hero-visual'));
+</script>
+</body>
+</html>
