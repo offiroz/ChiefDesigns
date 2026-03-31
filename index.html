@@ -1745,12 +1745,15 @@
                 return activeTags.size === 0 || [...activeTags].some(t => ptags.includes(t));
             });
 
+            // Cancel any running animations to avoid opacity conflicts
+            items.forEach(item => item.getAnimations().forEach(a => a.cancel()));
+
             // Phase 1: fade out items that will be hidden
             const fadeOuts = items.map((item, i) => {
                 if (!willShow[i] && item.style.display !== 'none') {
                     return item.animate(
                         [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0.85)' }],
-                        { duration: 200, fill: 'forwards', easing: 'ease' }
+                        { duration: 200, easing: 'ease' }
                     ).finished;
                 }
                 return Promise.resolve();
@@ -1765,9 +1768,15 @@
                 }
             });
 
-            // Apply display changes
+            // Apply display changes + reset opacity explicitly
             items.forEach((item, i) => {
-                item.style.display = willShow[i] ? '' : 'none';
+                if (willShow[i]) {
+                    item.style.display = '';
+                    item.style.opacity = '1';
+                } else {
+                    item.style.display = 'none';
+                    item.style.opacity = '';
+                }
             });
 
             // Force reflow
@@ -1790,10 +1799,14 @@
                     }
                 } else {
                     // Was hidden - fade in
+                    item.style.opacity = '0';
                     item.animate(
                         [{ opacity: 0, transform: 'scale(0.85)' }, { opacity: 1, transform: 'scale(1)' }],
-                        { duration: 300, easing: 'ease', delay: 120 }
-                    );
+                        { duration: 300, easing: 'ease', delay: 120, fill: 'forwards' }
+                    ).finished.then(() => {
+                        item.style.opacity = '1';
+                        item.getAnimations().forEach(a => a.cancel());
+                    });
                 }
             });
         }
