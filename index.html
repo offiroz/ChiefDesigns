@@ -938,6 +938,70 @@
             .modal-body { padding: 20px; }
             .modal-body h3 { font-size: 1.2rem; }
         }
+
+        /* ── Tag Filter ── */
+        .tag-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .tag-btn {
+            padding: 8px 20px;
+            border-radius: 25px;
+            border: 2px solid #e75480;
+            background: transparent;
+            color: #e75480;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            font-family: inherit;
+        }
+
+        .tag-btn:hover {
+            background: rgba(231, 84, 128, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .tag-btn.active {
+            background: linear-gradient(135deg, #e75480, #de4f6e);
+            color: white;
+            box-shadow: 0 4px 14px rgba(231, 84, 128, 0.38);
+            transform: translateY(-2px);
+        }
+
+        .tag-btn.reset-btn {
+            border-color: #bbb;
+            color: #888;
+        }
+
+        .tag-btn.reset-btn:hover {
+            border-color: #888;
+            color: #555;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Tag pills on cards */
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 12px;
+        }
+
+        .card-tag {
+            display: inline-block;
+            background: rgba(231, 84, 128, 0.08);
+            color: #de4f6e;
+            border: 1px solid rgba(231, 84, 128, 0.22);
+            padding: 3px 11px;
+            border-radius: 12px;
+            font-size: 0.78rem;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
@@ -1001,10 +1065,13 @@
     <section class="section" id="portfolio">
         <h2>תיק עבודות</h2>
         
+        <!-- Tag Filter -->
+        <div class="tag-filter" id="tagFilter"></div>
+
         <!-- Portfolio Grid with Real Images -->
         <div class="portfolio-grid">
-            
-            <div class="portfolio-item" onclick="openProject(9)">
+
+            <div class="portfolio-item" data-index="9" onclick="openProject(9)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966232/6cdd0333af96a38d_rjsfny.jpg" alt="John Chimuchi Branding">
                 </div>
@@ -1015,7 +1082,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(10)">
+            <div class="portfolio-item" data-index="10" onclick="openProject(10)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966866/OA4D6j5OZIm_ni6tom.jpg" alt="פלאייר חנות נגינה">
                 </div>
@@ -1026,7 +1093,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(0)">
+            <div class="portfolio-item" data-index="0" onclick="openProject(0)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773593087/whatsapp_mocup_z6b1dt.jpg" alt="בוט וואטסאפ">
                 </div>
@@ -1037,7 +1104,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(1)">
+            <div class="portfolio-item" data-index="1" onclick="openProject(1)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774967609/sjipu1phIM_amttmm.png" alt="צילוין">
                 </div>
@@ -1048,7 +1115,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(2)">
+            <div class="portfolio-item" data-index="2" onclick="openProject(2)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774968294/064daef4a3f4e6e4_apjtzp.webp" alt="שף ג'ולי">
                 </div>
@@ -1059,7 +1126,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(3)">
+            <div class="portfolio-item" data-index="3" onclick="openProject(3)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583707/Space_CV_rbniyp.png" alt="Space CV">
                 </div>
@@ -1070,7 +1137,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(4)">
+            <div class="portfolio-item" data-index="4" onclick="openProject(4)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/name-changer_i64kfk.png" alt="כלי החלפת שמות">
                 </div>
@@ -1081,7 +1148,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(5)">
+            <div class="portfolio-item" data-index="5" onclick="openProject(5)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774968786/fTLNcnBSCbO_nbjirs.webp" alt="אופיר מורה לנגינה">
                 </div>
@@ -1092,7 +1159,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(6)">
+            <div class="portfolio-item" data-index="6" onclick="openProject(6)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583525/carmelmagazin_wqx9ab.png" alt="מגזין חודשי">
                 </div>
@@ -1103,7 +1170,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(7)">
+            <div class="portfolio-item" data-index="7" onclick="openProject(7)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774970623/JOeR20SFM0q_ibkm7p.webp" alt="ספר מתכונים">
                 </div>
@@ -1114,7 +1181,7 @@
                 </div>
             </div>
 
-            <div class="portfolio-item" onclick="openProject(8)">
+            <div class="portfolio-item" data-index="8" onclick="openProject(8)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/hafakothafakot_jsuvlb.png" alt="הפקות הפקות">
                 </div>
@@ -1458,6 +1525,7 @@
                 title: "Chief Bot - בוט וואטסאפ חכם לניהול לקוחות",
                 description: "בוט וואטסאפ עסקי חי המחובר ישירות ל-Meta WhatsApp Business API, מונע על ידי Gemini AI לתגובות חכמות בעברית. הבוט מנהל פניות לקוחות 24/7, מזהה ומחלץ לידים אוטומטית ומתעד אותם ב-Google Sheets, ושולח התראות בזמן אמת לבעל העסק. רץ על שרת DigitalOcean עם Node.js, Express ו-PM2 לזמינות מלאה.",
                 link: "https://chiefdesigns.co.il/landing.html",
+                tags: ["פיתוח", "בינה מלאכותית"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773593087/whatsapp_mocup_z6b1dt.jpg"
                 ]
@@ -1466,6 +1534,7 @@
                 title: "חנות תכשיטים - צילוין",
                 description: "אתר חנות תכשיטים יוקרתי בעיצוב מינימליסטי, כולל גלריית קולקציות (עגילים, שרשראות, טבעות, צמידים), עמוד אודות, אפשרות להזמנה מיוחדת ומותאמת אישית, וטופס יצירת קשר — עם תמיכה מלאה בעברית ו-RTL.",
                 link: "https://offiroz.github.io/tsilevin/",
+                tags: ["אתר אינטרנט", "עיצוב דיגיטלי"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774967609/sjipu1phIM_amttmm.png"
                 ]
@@ -1474,6 +1543,7 @@
                 title: "שף ג'ולי - אפליקציית המלצות מתכונים מונעת AI",
                 description: "אפליקציית ווב מלאה המשלבת בינה מלאכותית (Google Gemini API) ליצירת מתכונים מותאמים אישית בעברית. המערכת כוללת מנגנון דירוג משתמשים לסינון המלצות איכותיות, ניהול מתכונים שמורים, ופיד השראה קהילתי. פותחה עם Node.js, Express, SQLite, ועיצוב RTL מותאם.",
                 link: "https://chefjuly-production.up.railway.app/",
+                tags: ["פיתוח", "בינה מלאכותית", "אפליקציה"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774968294/064daef4a3f4e6e4_apjtzp.webp",
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583704/Cheff_July_ddcigt.png"
@@ -1483,6 +1553,7 @@
                 title: "Space CV - מערכת התאמת קורות חיים מונעת AI",
                 description: "אפליקציית ווב מלאה המשלבת בינה מלאכותית (Claude Sonnet 4) להתאמה חכמה של קורות חיים לתיאורי משרות. המערכת מנתחת דרישות משרה, מזהה מילות מפתח רלוונטיות, ומייצרת גרסת קורות חיים מותאמת. כוללת ניתוח אחוז התאמה, זיהוי פערי כישורים, והמלצות לשיפור.",
                 link: "#",
+                tags: ["פיתוח", "בינה מלאכותית", "אפליקציה"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583707/Space_CV_rbniyp.png",
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774967919/c0a3e6a52a89ce86_hsh42p.webp"
@@ -1492,6 +1563,7 @@
                 title: "כלי החלפת שמות - כפר תקווה",
                 description: "כלי מתקדם להגנה על פרטיות עם תמיכה רב-לשונית. עובד במחשב המקומי ללא שליחת מידע לחוץ.",
                 link: "https://offiroz.github.io/name-remover-tool/",
+                tags: ["פיתוח"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/name-changer_i64kfk.png"
                 ]
@@ -1500,6 +1572,7 @@
                 title: "אתר תדמית למורה לנגינה",
                 description: "בניית אתר תדמית מקצועי כולל מקום להעלאת חומרים אישיים, סרטונים ומקום עתידי להעלאת גיטרות ושיפוץ.",
                 link: "https://offiroz.github.io/offirsjam/",
+                tags: ["אתר אינטרנט", "עיצוב דיגיטלי"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774968786/fTLNcnBSCbO_nbjirs.webp",
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773584530/offirsjam_rued9m.png"
@@ -1509,6 +1582,7 @@
                 title: "מגזין חודשי אינטראקטיבי",
                 description: "יצירת מגזין חודשי מותאם לאנשים עם צרכים מיוחדים, כולל משחקים דיגיטליים וגרסה להדפסה.",
                 link: "https://offiroz.github.io/Carmel-magzine/",
+                tags: ["גרפיקה", "עיצוב דיגיטלי"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583525/carmelmagazin_wqx9ab.png"
                 ]
@@ -1517,6 +1591,7 @@
                 title: "ספר מתכונים לפיצה נפוליטנית",
                 description: "ספר מעוצב עם מתכונים לטאבון COZZE, כולל תמונות מעובדות ב-AI ואווירה קלילה וקומית.",
                 link: "https://offiroz.github.io/cozze-pizza-oven/",
+                tags: ["גרפיקה", "עיצוב דיגיטלי"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774970623/JOeR20SFM0q_ibkm7p.webp",
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774970623/z9McMsUC3Mm_kwuvzc.webp"
@@ -1526,6 +1601,7 @@
                 title: "מערכת אישורי הגעה לאירועים",
                 description: "אתר ומערכת מלאה לניהול ואישור הגעה לאירועים, עם ממשק ידידותי למארגנים ולמוזמנים.",
                 link: "https://offiroz.github.io/hafakot-hafakot/",
+                tags: ["פיתוח", "אתר אינטרנט"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/hafakothafakot_jsuvlb.png"
                 ]
@@ -1534,6 +1610,7 @@
                 title: "מיתוג מוזיקלי – John Chimuchi",
                 description: "בניית זהות ויזואלית מלאה לאומן עצמאי – פלטת צבעים, סגנון גרפי עקבי, פוסטרים להופעות וסינגלים ו-Thumbnails לפלטפורמות הדיגיטליות.",
                 link: "#",
+                tags: ["מיתוג", "גרפיקה", "מוזיקה"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966232/6cdd0333af96a38d_rjsfny.jpg",
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966232/3c14806e7f5129e1_qsehrs.jpg",
@@ -1544,6 +1621,7 @@
                 title: "פלאייר לחנות כלי נגינה",
                 description: "עיצוב פלאייר שיווקי לחנות נגינה, כולל ציור ידני מאפס של כלי נגינה וחלקיהם. כל אלמנט גרפי צויר ועוצב במיוחד לפרויקט.",
                 link: "#",
+                tags: ["גרפיקה", "מיתוג", "מוזיקה"],
                 images: [
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966866/OA4D6j5OZIm_ni6tom.jpg",
                     "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966866/BqgutgNkJX6_cyw69q.jpg"
@@ -1608,6 +1686,121 @@
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') closeProject();
+        });
+
+        // ── Tag Filter ──
+        const ALL_TAGS = ["פיתוח", "בינה מלאכותית", "אתר אינטרנט", "אפליקציה", "גרפיקה", "מיתוג", "עיצוב דיגיטלי", "מוזיקה"];
+        let activeTags = new Set();
+
+        function buildTagFilter() {
+            const filter = document.getElementById('tagFilter');
+
+            const resetBtn = document.createElement('button');
+            resetBtn.className = 'tag-btn reset-btn';
+            resetBtn.textContent = 'הצג הכל';
+            resetBtn.onclick = () => { activeTags.clear(); updateFilter(); };
+            filter.appendChild(resetBtn);
+
+            ALL_TAGS.forEach(tag => {
+                const btn = document.createElement('button');
+                btn.className = 'tag-btn';
+                btn.textContent = tag;
+                btn.dataset.tag = tag;
+                btn.onclick = () => toggleTag(tag);
+                filter.appendChild(btn);
+            });
+        }
+
+        function renderCardTags() {
+            document.querySelectorAll('.portfolio-item').forEach(item => {
+                const idx = parseInt(item.dataset.index);
+                const tags = projects[idx].tags;
+                const content = item.querySelector('.portfolio-content');
+                const div = document.createElement('div');
+                div.className = 'card-tags';
+                div.innerHTML = tags.map(t => `<span class="card-tag">${t}</span>`).join('');
+                content.appendChild(div);
+            });
+        }
+
+        function toggleTag(tag) {
+            activeTags.has(tag) ? activeTags.delete(tag) : activeTags.add(tag);
+            updateFilter();
+        }
+
+        function updateFilter() {
+            document.querySelectorAll('.tag-btn[data-tag]').forEach(btn => {
+                btn.classList.toggle('active', activeTags.has(btn.dataset.tag));
+            });
+            applyFilter();
+        }
+
+        async function applyFilter() {
+            const grid = document.querySelector('.portfolio-grid');
+            const items = [...grid.querySelectorAll('.portfolio-item')];
+
+            const willShow = items.map(item => {
+                const idx = parseInt(item.dataset.index);
+                const ptags = projects[idx].tags;
+                return activeTags.size === 0 || [...activeTags].some(t => ptags.includes(t));
+            });
+
+            // Phase 1: fade out items that will be hidden
+            const fadeOuts = items.map((item, i) => {
+                if (!willShow[i] && item.style.display !== 'none') {
+                    return item.animate(
+                        [{ opacity: 1, transform: 'scale(1)' }, { opacity: 0, transform: 'scale(0.85)' }],
+                        { duration: 200, fill: 'forwards', easing: 'ease' }
+                    ).finished;
+                }
+                return Promise.resolve();
+            });
+            await Promise.all(fadeOuts);
+
+            // Record positions of items that will stay visible
+            const firstRects = {};
+            items.forEach((item, i) => {
+                if (willShow[i] && item.style.display !== 'none') {
+                    firstRects[i] = item.getBoundingClientRect();
+                }
+            });
+
+            // Apply display changes
+            items.forEach((item, i) => {
+                item.style.display = willShow[i] ? '' : 'none';
+            });
+
+            // Force reflow
+            grid.offsetHeight;
+
+            // FLIP animate visible items
+            items.forEach((item, i) => {
+                if (!willShow[i]) return;
+                const last = item.getBoundingClientRect();
+                const first = firstRects[i];
+
+                if (first) {
+                    const dx = first.left - last.left;
+                    const dy = first.top - last.top;
+                    if (dx !== 0 || dy !== 0) {
+                        item.animate(
+                            [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'translate(0, 0)' }],
+                            { duration: 350, easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }
+                        );
+                    }
+                } else {
+                    // Was hidden - fade in
+                    item.animate(
+                        [{ opacity: 0, transform: 'scale(0.85)' }, { opacity: 1, transform: 'scale(1)' }],
+                        { duration: 300, easing: 'ease', delay: 120 }
+                    );
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            buildTagFilter();
+            renderCardTags();
         });
     </script>
 
