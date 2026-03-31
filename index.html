@@ -15,6 +15,8 @@
     </script>
     
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
 
     <style>
         * {
@@ -787,6 +789,155 @@
                     margin: 5px 10px;
                 }
             }
+
+        /* ── Portfolio Modal ── */
+        .project-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.78);
+            z-index: 9000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .project-modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .project-modal {
+            background: #fff;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 880px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            transform: translateY(28px) scale(0.97);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+        }
+        .project-modal-overlay.active .project-modal {
+            transform: translateY(0) scale(1);
+        }
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 20;
+            background: rgba(0,0,0,0.55);
+            border: none;
+            color: #fff;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+        .modal-close:hover { background: rgba(0,0,0,0.85); }
+
+        /* Swiper inside modal */
+        .modal-swiper {
+            width: 100%;
+            height: 420px;
+            border-radius: 20px 20px 0 0;
+            overflow: hidden;
+        }
+        .modal-swiper .swiper-slide {
+            overflow: hidden;
+        }
+        .modal-swiper .swiper-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .modal-swiper .swiper-button-next,
+        .modal-swiper .swiper-button-prev {
+            color: #fff;
+            background: rgba(0,0,0,0.4);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .modal-swiper .swiper-button-next:hover,
+        .modal-swiper .swiper-button-prev:hover {
+            background: rgba(231,84,128,0.85);
+        }
+        .modal-swiper .swiper-button-next::after,
+        .modal-swiper .swiper-button-prev::after {
+            font-size: 1rem;
+            font-weight: 900;
+        }
+        .modal-swiper .swiper-pagination-progressbar {
+            height: 4px;
+        }
+        .modal-swiper .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
+            background: linear-gradient(90deg, #e75480, #de4f6e);
+        }
+
+        /* Modal body */
+        .modal-body {
+            padding: 28px 32px 32px;
+        }
+        .modal-body h3 {
+            font-size: 1.45rem;
+            color: #222;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .modal-body p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 22px;
+            font-size: 1rem;
+        }
+        .modal-visit-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #e75480, #de4f6e);
+            color: #fff;
+            padding: 12px 32px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(231,84,128,0.35);
+        }
+        .modal-visit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 22px rgba(231,84,128,0.45);
+        }
+
+        /* Clickable portfolio card */
+        .portfolio-item {
+            cursor: pointer;
+        }
+        .portfolio-item .portfolio-open-hint {
+            color: #de4f6e;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-top: 8px;
+            display: inline-block;
+            transition: color 0.3s;
+        }
+        .portfolio-item:hover .portfolio-open-hint {
+            color: #c44569;
+        }
+
+        @media (max-width: 600px) {
+            .modal-swiper { height: 240px; }
+            .modal-body { padding: 20px; }
+            .modal-body h3 { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
@@ -853,102 +1004,102 @@
         <!-- Portfolio Grid with Real Images -->
         <div class="portfolio-grid">
             
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(0)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773593087/whatsapp_mocup_z6b1dt.jpg" alt="בוט וואטסאפ">
                 </div>
                 <div class="portfolio-content">
                     <h3>Chief Bot - בוט וואטסאפ חכם לניהול לקוחות</h3>
-                    <p>בוט וואטסאפ עסקי חי המחובר ישירות ל-Meta WhatsApp Business API, מונע על ידי Gemini AI לתגובות חכמות בעברית. הבוט מנהל פניות לקוחות 24/7, מזהה ומחלץ לידים אוטומטית ומתעד אותם ב-Google Sheets, ושולח התראות בזמן אמת לבעל העסק. רץ על שרת DigitalOcean עם Node.js, Express ו-PM2 לזמינות מלאה. ארכיטקטורה מולטי-טננט שמאפשרת הרחבה לעסקים מרובים.</p>
-                    <a href="https://chiefdesigns.co.il/landing.html" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <p>בוט וואטסאפ עסקי חי המחובר ישירות ל-Meta WhatsApp Business API, מונע על ידי Gemini AI לתגובות חכמות בעברית.</p>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
-            
-            <div class="portfolio-item">
+
+            <div class="portfolio-item" onclick="openProject(1)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773757273/c07085c4-bb82-439d-b94c-d2fce62cfb17.png" alt="צילוין">
                 </div>
                 <div class="portfolio-content">
                     <h3>חנות תכשיטים - צילוין</h3>
-                    <p>אתר חנות תכשיטים יוקרתי בעיצוב מינימליסטי, כולל גלריית קולקציות (עגילים, שרשראות, טבעות, צמידים), עמוד אודות, אפשרות להזמנה מיוחדת ומותאמת אישית, וטופס יצירת קשר — עם תמיכה מלאה בעברית ו-RTL.</p>
-                    <a href="https://offiroz.github.io/tsilevin/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <p>אתר חנות תכשיטים יוקרתי בעיצוב מינימליסטי, כולל גלריית קולקציות עם תמיכה מלאה בעברית ו-RTL.</p>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
 
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(2)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583704/Cheff_July_ddcigt.png" alt="שף ג'ולי">
                 </div>
                 <div class="portfolio-content">
                     <h3>שף ג'ולי - אפליקציית המלצות מתכונים מונעת AI</h3>
-                    <p>אפליקציית ווב מלאה המשלבת בינה מלאכותית (Google Gemini API) ליצירת מתכונים מותאמים אישית בעברית. המערכת כוללת מנגנון דירוג משתמשים לסינון המלצות איכותיות, ניהול מתכונים שמורים, ופיד השראה קהילתי. פותחה עם Node.js, Express, SQLite, ועיצוב RTL מותאם עם אנימציות GIF מותאמות אישית.</p>
-                    <a href="https://chefjuly-production.up.railway.app/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <p>אפליקציית ווב מלאה המשלבת בינה מלאכותית ליצירת מתכונים מותאמים אישית בעברית.</p>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
 
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(3)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583707/Space_CV_rbniyp.png" alt="Space CV">
                 </div>
                 <div class="portfolio-content">
                     <h3>Space CV - מערכת התאמת קורות חיים מונעת AI</h3>
-                    <p>אפליקציית ווב מלאה המשלבת בינה מלאכותית (Claude Sonnet 4) להתאמה חכמה של קורות חיים לתיאורי משרות. המערכת מנתחת דרישות משרה, מזהה מילות מפתח רלוונטיות, ומייצרת גרסת קורות חיים מותאמת תוך שמירה על אמינות המידע המקורי. כוללת ניתוח אחוז התאמה, זיהוי פערי כישורים, והמלצות לשיפור. פותחה עם Python Flask, Anthropic API, ועיצוב RTL בעברית עם ממשק חלל מונפש.</p>
-                    <a href="[YOUR_RAILWAY_URL]" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <p>מערכת להתאמה חכמה של קורות חיים לתיאורי משרות, מונעת על ידי Claude Sonnet.</p>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
-            
-            <div class="portfolio-item">
+
+            <div class="portfolio-item" onclick="openProject(4)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/name-changer_i64kfk.png" alt="כלי החלפת שמות">
                 </div>
                 <div class="portfolio-content">
                     <h3>כלי החלפת שמות - כפר תקווה</h3>
                     <p>כלי מתקדם להגנה על פרטיות עם תמיכה רב-לשונית. עובד במחשב המקומי ללא שליחת מידע לחוץ.</p>
-                    <a href="https://offiroz.github.io/name-remover-tool/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
 
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(5)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773584530/offirsjam_rued9m.png" alt="אופיר מורה לנגינה">
                 </div>
                 <div class="portfolio-content">
                     <h3>אתר תדמית למורה לנגינה</h3>
                     <p>בניית אתר תדמית מקצועי כולל מקום להעלאת חומרים אישיים, סרטונים ומקום עתידי להעלאת גיטרות ושיפוץ.</p>
-                    <a href="https://offiroz.github.io/offirsjam/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
 
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(6)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583525/carmelmagazin_wqx9ab.png" alt="מגזין חודשי">
                 </div>
                 <div class="portfolio-content">
                     <h3>מגזין חודשי אינטראקטיבי</h3>
                     <p>יצירת מגזין חודשי מותאם לאנשים עם צרכים מיוחדים, כולל משחקים דיגיטליים וגרסה להדפסה.</p>
-                    <a href="https://offiroz.github.io/Carmel-magzine/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
 
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(7)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/cookbook_okabgx.png" alt="ספר מתכונים">
                 </div>
                 <div class="portfolio-content">
                     <h3>ספר מתכונים לפיצה נפוליטנית</h3>
                     <p>ספר מעוצב עם מתכונים לטאבון COZZE, כולל תמונות מעובדות ב-AI ואווירה קלילה וקומית.</p>
-                    <a href="https://offiroz.github.io/cozze-pizza-oven/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
 
-            <div class="portfolio-item">
+            <div class="portfolio-item" onclick="openProject(8)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/hafakothafakot_jsuvlb.png" alt="הפקות הפקות">
                 </div>
                 <div class="portfolio-content">
                     <h3>מערכת אישורי הגעה לאירועים</h3>
                     <p>אתר ומערכת מלאה לניהול ואישור הגעה לאירועים, עם ממשק ידידותי למארגנים ולמוזמנים.</p>
-                    <a href="https://offiroz.github.io/hafakot-hafakot/" target="_blank" class="portfolio-link">צפה בפרויקט ←</a>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
         </div>
@@ -1256,6 +1407,164 @@
     <div id="successMessage" class="success-message">
         ההגדרות נשמרו בהצלחה! ✓
     </div>
+
+    <!-- Portfolio Project Modal -->
+    <div class="project-modal-overlay" id="projectModalOverlay" onclick="closeProjectIfOutside(event)">
+        <div class="project-modal" id="projectModal">
+            <button class="modal-close" onclick="closeProject()" aria-label="סגור">✕</button>
+            <div class="swiper modal-swiper" id="modalSwiper">
+                <div class="swiper-wrapper" id="modalSwiperWrapper"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-pagination"></div>
+            </div>
+            <div class="modal-body">
+                <h3 id="modalTitle"></h3>
+                <p id="modalDesc"></p>
+                <a href="#" id="modalLink" target="_blank" rel="noopener noreferrer" class="modal-visit-btn">צפה בפרויקט ←</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+
+    <script>
+        // ── Project data ──
+        const projects = [
+            {
+                title: "Chief Bot - בוט וואטסאפ חכם לניהול לקוחות",
+                description: "בוט וואטסאפ עסקי חי המחובר ישירות ל-Meta WhatsApp Business API, מונע על ידי Gemini AI לתגובות חכמות בעברית. הבוט מנהל פניות לקוחות 24/7, מזהה ומחלץ לידים אוטומטית ומתעד אותם ב-Google Sheets, ושולח התראות בזמן אמת לבעל העסק. רץ על שרת DigitalOcean עם Node.js, Express ו-PM2 לזמינות מלאה.",
+                link: "https://chiefdesigns.co.il/landing.html",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773593087/whatsapp_mocup_z6b1dt.jpg"
+                ]
+            },
+            {
+                title: "חנות תכשיטים - צילוין",
+                description: "אתר חנות תכשיטים יוקרתי בעיצוב מינימליסטי, כולל גלריית קולקציות (עגילים, שרשראות, טבעות, צמידים), עמוד אודות, אפשרות להזמנה מיוחדת ומותאמת אישית, וטופס יצירת קשר — עם תמיכה מלאה בעברית ו-RTL.",
+                link: "https://offiroz.github.io/tsilevin/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773757273/c07085c4-bb82-439d-b94c-d2fce62cfb17.png"
+                ]
+            },
+            {
+                title: "שף ג'ולי - אפליקציית המלצות מתכונים מונעת AI",
+                description: "אפליקציית ווב מלאה המשלבת בינה מלאכותית (Google Gemini API) ליצירת מתכונים מותאמים אישית בעברית. המערכת כוללת מנגנון דירוג משתמשים לסינון המלצות איכותיות, ניהול מתכונים שמורים, ופיד השראה קהילתי. פותחה עם Node.js, Express, SQLite, ועיצוב RTL מותאם.",
+                link: "https://chefjuly-production.up.railway.app/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583704/Cheff_July_ddcigt.png"
+                ]
+            },
+            {
+                title: "Space CV - מערכת התאמת קורות חיים מונעת AI",
+                description: "אפליקציית ווב מלאה המשלבת בינה מלאכותית (Claude Sonnet 4) להתאמה חכמה של קורות חיים לתיאורי משרות. המערכת מנתחת דרישות משרה, מזהה מילות מפתח רלוונטיות, ומייצרת גרסת קורות חיים מותאמת. כוללת ניתוח אחוז התאמה, זיהוי פערי כישורים, והמלצות לשיפור.",
+                link: "#",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583707/Space_CV_rbniyp.png"
+                ]
+            },
+            {
+                title: "כלי החלפת שמות - כפר תקווה",
+                description: "כלי מתקדם להגנה על פרטיות עם תמיכה רב-לשונית. עובד במחשב המקומי ללא שליחת מידע לחוץ.",
+                link: "https://offiroz.github.io/name-remover-tool/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/name-changer_i64kfk.png"
+                ]
+            },
+            {
+                title: "אתר תדמית למורה לנגינה",
+                description: "בניית אתר תדמית מקצועי כולל מקום להעלאת חומרים אישיים, סרטונים ומקום עתידי להעלאת גיטרות ושיפוץ.",
+                link: "https://offiroz.github.io/offirsjam/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773584530/offirsjam_rued9m.png"
+                ]
+            },
+            {
+                title: "מגזין חודשי אינטראקטיבי",
+                description: "יצירת מגזין חודשי מותאם לאנשים עם צרכים מיוחדים, כולל משחקים דיגיטליים וגרסה להדפסה.",
+                link: "https://offiroz.github.io/Carmel-magzine/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583525/carmelmagazin_wqx9ab.png"
+                ]
+            },
+            {
+                title: "ספר מתכונים לפיצה נפוליטנית",
+                description: "ספר מעוצב עם מתכונים לטאבון COZZE, כולל תמונות מעובדות ב-AI ואווירה קלילה וקומית.",
+                link: "https://offiroz.github.io/cozze-pizza-oven/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/cookbook_okabgx.png"
+                ]
+            },
+            {
+                title: "מערכת אישורי הגעה לאירועים",
+                description: "אתר ומערכת מלאה לניהול ואישור הגעה לאירועים, עם ממשק ידידותי למארגנים ולמוזמנים.",
+                link: "https://offiroz.github.io/hafakot-hafakot/",
+                images: [
+                    "https://res.cloudinary.com/dy4zfgrmu/image/upload/v1773583523/hafakothafakot_jsuvlb.png"
+                ]
+            }
+        ];
+
+        let modalSwiperInstance = null;
+
+        function openProject(index) {
+            const project = projects[index];
+
+            document.getElementById('modalTitle').textContent = project.title;
+            document.getElementById('modalDesc').textContent = project.description;
+            const linkEl = document.getElementById('modalLink');
+            linkEl.href = project.link;
+            linkEl.style.display = (project.link && project.link !== '#') ? 'inline-block' : 'none';
+
+            // Build slides
+            const wrapper = document.getElementById('modalSwiperWrapper');
+            wrapper.innerHTML = project.images.map(img =>
+                `<div class="swiper-slide"><img src="${img}" alt="${project.title}" loading="lazy"></div>`
+            ).join('');
+
+            // Destroy previous Swiper instance if exists
+            if (modalSwiperInstance) {
+                modalSwiperInstance.destroy(true, true);
+                modalSwiperInstance = null;
+            }
+
+            const hasMultiple = project.images.length > 1;
+            modalSwiperInstance = new Swiper('#modalSwiper', {
+                pagination: {
+                    el: '#modalSwiper .swiper-pagination',
+                    type: 'progressbar'
+                },
+                navigation: {
+                    nextEl: '#modalSwiper .swiper-button-next',
+                    prevEl: '#modalSwiper .swiper-button-prev'
+                },
+                loop: hasMultiple
+            });
+
+            // Hide nav arrows when only 1 image
+            document.querySelectorAll('#modalSwiper .swiper-button-next, #modalSwiper .swiper-button-prev')
+                .forEach(btn => { btn.style.display = hasMultiple ? '' : 'none'; });
+
+            document.getElementById('projectModalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeProject() {
+            document.getElementById('projectModalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeProjectIfOutside(e) {
+            if (e.target === document.getElementById('projectModalOverlay')) {
+                closeProject();
+            }
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeProject();
+        });
+    </script>
 
 </body>
 </html>
