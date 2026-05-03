@@ -1,15 +1,25 @@
 require('dotenv').config();
-const express = require('express');
-const path    = require('path');
+const express   = require('express');
+const path      = require('path');
+const rateLimit = require('express-rate-limit');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+
+// 20 requests per minute per IP
+const limiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'יותר מדי בקשות — נסו שוב בעוד דקה' },
+});
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Proxy endpoint — keeps the API key server-side
-app.post('/api/format', async (req, res) => {
+app.post('/api/format', limiter, async (req, res) => {
   const { messages, model, max_tokens } = req.body;
 
   if (!process.env.ANTHROPIC_API_KEY) {
