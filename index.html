@@ -884,6 +884,38 @@
             background: linear-gradient(90deg, #e75480, #de4f6e);
         }
 
+        /* Thumbnail strip */
+        .modal-thumbnails {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            overflow-x: auto;
+            background: #f5f5f5;
+            justify-content: center;
+        }
+        .modal-thumbnails:empty { display: none; }
+        .modal-thumb {
+            width: 64px;
+            height: 48px;
+            flex-shrink: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, opacity 0.2s;
+            opacity: 0.6;
+        }
+        .modal-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .modal-thumb.active {
+            border-color: #e75480;
+            opacity: 1;
+        }
+
         /* Modal body */
         .modal-body {
             padding: 28px 32px 32px;
@@ -1071,6 +1103,17 @@
         <!-- Portfolio Grid with Real Images -->
         <div class="portfolio-grid">
 
+            <div class="portfolio-item" data-index="11" onclick="openProject(11)">
+                <div class="portfolio-image">
+                    <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1778498036/%D7%9E%D7%97%D7%90%D7%94_%D7%A1%D7%95%D7%A4%D7%99%D7%AA_1_ybppgq.png" alt="גלויות גרפיות למחאה חברתית">
+                </div>
+                <div class="portfolio-content">
+                    <h3>גלויות גרפיות למחאה חברתית – אחדות החברה</h3>
+                    <p>סדרת גלויות גרפיות בנושא אחדות החברה, עם אייקונים מותאמים בצורת מעגל, פסיפס ושורשים.</p>
+                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
+                </div>
+            </div>
+
             <div class="portfolio-item" data-index="9" onclick="openProject(9)">
                 <div class="portfolio-image">
                     <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1774966232/6cdd0333af96a38d_rjsfny.jpg" alt="John Chimuchi Branding">
@@ -1188,16 +1231,6 @@
                 <div class="portfolio-content">
                     <h3>מערכת אישורי הגעה לאירועים</h3>
                     <p>אתר ומערכת מלאה לניהול ואישור הגעה לאירועים, עם ממשק ידידותי למארגנים ולמוזמנים.</p>
-                    <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
-                </div>
-            </div>
-            <div class="portfolio-item" data-index="11" onclick="openProject(11)">
-                <div class="portfolio-image">
-                    <img src="https://res.cloudinary.com/dy4zfgrmu/image/upload/v1778498036/%D7%9E%D7%97%D7%90%D7%94_%D7%A1%D7%95%D7%A4%D7%99%D7%AA_1_ybppgq.png" alt="גלויות גרפיות למחאה חברתית">
-                </div>
-                <div class="portfolio-content">
-                    <h3>גלויות גרפיות למחאה חברתית – אחדות החברה</h3>
-                    <p>סדרת גלויות גרפיות בנושא אחדות החברה, עם אייקונים מותאמים בצורת מעגל, פסיפס ושורשים.</p>
                     <span class="portfolio-open-hint">לחץ לפרטים נוספים ←</span>
                 </div>
             </div>
@@ -1517,6 +1550,7 @@
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-pagination"></div>
             </div>
+            <div class="modal-thumbnails" id="modalThumbnails"></div>
             <div class="modal-body">
                 <h3 id="modalTitle"></h3>
                 <p id="modalDesc"></p>
@@ -1667,6 +1701,18 @@
                 `<div class="swiper-slide"><img src="${img}" alt="${project.title}" loading="lazy"></div>`
             ).join('');
 
+            // Build thumbnails
+            const thumbsEl = document.getElementById('modalThumbnails');
+            if (project.images.length > 1) {
+                thumbsEl.innerHTML = project.images.map((img, i) =>
+                    `<div class="modal-thumb${i === 0 ? ' active' : ''}" data-idx="${i}">
+                        <img src="${img}" alt="">
+                    </div>`
+                ).join('');
+            } else {
+                thumbsEl.innerHTML = '';
+            }
+
             // Destroy previous Swiper instance if exists
             if (modalSwiperInstance) {
                 modalSwiperInstance.destroy(true, true);
@@ -1683,7 +1729,22 @@
                     nextEl: '#modalSwiper .swiper-button-next',
                     prevEl: '#modalSwiper .swiper-button-prev'
                 },
-                loop: hasMultiple
+                loop: false,
+                on: {
+                    slideChange() {
+                        const idx = this.activeIndex;
+                        thumbsEl.querySelectorAll('.modal-thumb').forEach((t, i) => {
+                            t.classList.toggle('active', i === idx);
+                        });
+                    }
+                }
+            });
+
+            // Thumbnail click navigation
+            thumbsEl.querySelectorAll('.modal-thumb').forEach(thumb => {
+                thumb.addEventListener('click', () => {
+                    modalSwiperInstance.slideTo(parseInt(thumb.dataset.idx));
+                });
             });
 
             // Hide nav arrows when only 1 image
