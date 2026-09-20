@@ -1,0 +1,165 @@
+name: Build & Deploy
+
+# ─────────────────────────────────────────────────────────────
+#  redesign  →  staging.chiefdesigns.co.il
+#  main      →  chiefdesigns.co.il
+#
+#  כל פריסה יוצרת תיקיית release חדשה ומחליפה symlink.
+#  ההחלפה אטומית — אין רגע שבו האתר חצי מעודכן — וחזרה אחורה
+#  היא הצבעת ה-symlink לרילוז הקודם (ראה deploy/rollback.sh).
+#
+#  Secrets נדרשים (Settings → Secrets and variables → Actions):
+#    SSH_HOST        188.166.105.12
+#    SSH_USER        deploy
+#    SSH_PORT        22          (אופציונלי, ברירת מחדל 22)
+#    SSH_PRIVATE_KEY המפתח הפרטי של deploy@ (ראה deploy/server-setup.md)
+#    SSH_KNOWN_HOSTS הפלט של ssh-keyscan על השרת
+# ─────────────────────────────────────────────────────────────
+
+on:
+  push:
+    branches: [main, redesign]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  # פריסה אחת בכל רגע לכל ברנץ'. דחיפה חדשה מבטלת פריסה שרצה.
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '22'
+
+jobs:
+  # ───────────── בנייה ובדיקות ─────────────
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
+      - name: התקנת חבילות
+        run: npm ci
+
+      - name: בדיקת ניגודיות צבעים
+        # נכשל אם צמד צבעים כלשהו יורד מתחת ל-WCAG AA.
+        run: node scripts/check-contrast.mjs
+
+      - name: בדיקת טיפוסים
+        run: npx tsc --noEmit
+
+      - name: בנייה
+        env:
+          # staging מקבל robots.txt חוסם; פרודקשן לא.
+          NEXT_PUBLIC_SITE_ENV: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+        run: npm run build
+
+      - name: שמירת תוצר הבנייה
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+          path: out/
+          retention-days: 7
+
+  # ───────────── פריסה ─────────────
+  deploy:
+    needs: build
+    # לא פורסים מ-pull request — רק מדחיפה לברנץ' אמיתי.
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+
+    env:
+      TARGET_ROOT: ${{ github.ref == 'refs/heads/main'
+        && '/var/www/chiefdesigns-next'
+        || '/var/www/chiefdesigns-staging' }}
+      TARGET_NAME: ${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+
+    steps:
+      - name: הורדת תוצר הבנייה
+        uses: actions/download-artifact@v4
+        with:
+          name: site-${{ github.sha }}
+          path: out
+
+      - name: הגדרת SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      - name: קביעת חותמת הרילוז
+        id: rel
+        run: echo "stamp=$(date -u +%Y%m%d-%H%M%S)-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: העלאת הקבצים
+        env:
+          PORT: ${{ secrets.SSH_PORT || '22' }}
+          DEST: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          STAMP: ${{ steps.rel.outputs.stamp }}
+        run: |
+          set -euo pipefail
+          ssh -p "$PORT" "$DEST" "mkdir -p '$TARGET_ROOT/releases/$STAMP'"
+          rsync -az --delete \
+            -e "ssh -p $PORT" \
+            out/ "$DEST:$TARGET_ROOT/releases/$STAMP/"
+
+      - name: החלפת ה-symlink
+        env:
+          PORT: ${{ secrets.SSH_PORT || '22' }}
+          DEST: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+          STAMP: ${{ steps.rel.outputs.stamp }}
+        run: |
+          set -euo pipefail
+          ssh -p "$PORT" "$DEST" bash -se <<EOF
+            set -euo pipefail
+            cd '$TARGET_ROOT'
+
+            # בדיקת שפיות: לא מחליפים לרילוז בלי index.html
+            test -f "releases/$STAMP/index.html"
+
+            # שמירת הרילוז הקודם, לצורך rollback
+            if [ -L current ]; then
+              readlink current > .previous
+            fi
+
+            # החלפה אטומית: יצירת symlink זמני והזזתו מעל הקיים
+            ln -sfn "releases/$STAMP" .current-new
+            mv -Tf .current-new current
+
+            # שמירת 5 רילוזים אחרונים בלבד
+            ls -1dt releases/*/ | tail -n +6 | xargs -r rm -rf
+          EOF
+
+      - name: בדיקת עשן
+        env:
+          URL: ${{ github.ref == 'refs/heads/main'
+            && 'https://chiefdesigns.co.il/'
+            || 'https://staging.chiefdesigns.co.il/' }}
+          # בסטייג'ינג יש auth_basic, ולכן 401 הוא תשובה תקינה: היא
+          # מוכיחה שהשרת חי, שהתעודה תקפה ושהקונפיג נטען. בפרודקשן
+          # רק 200 מתקבל.
+          OK_CODES: ${{ github.ref == 'refs/heads/main' && '200' || '200 401' }}
+        run: |
+          set -euo pipefail
+          sleep 3
+          fail=0
+          for path in "" "privacy/" "terms/" "accessibility/"; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 "${URL}${path}")
+            case " $OK_CODES " in
+              *" $code "*) echo "✓ $code  ${URL}${path}" ;;
+              *) echo "✗ $code  ${URL}${path}"; echo "::error::${URL}${path} החזיר $code"; fail=1 ;;
+            esac
+          done
+          exit $fail
+
+      - name: סיכום
+        run: |
+          echo "### נפרס ל-$TARGET_NAME" >> "$GITHUB_STEP_SUMMARY"
+          echo "רילוז: \`${{ steps.rel.outputs.stamp }}\`" >> "$GITHUB_STEP_SUMMARY"
