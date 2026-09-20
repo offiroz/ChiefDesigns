@@ -1,0 +1,18 @@
+# ═══════════════════════════════════════════════════════════════
+#  git על ווינדוס ממיר שורות ל-CRLF. לסקריפטים שרצים על לינוקס
+#  זה קטלני: bash נופל עם "bad interpreter: /usr/bin/env bash^M".
+#  כאן קובעים LF בכל מקרה, לכל מי שיעבוד על הריפו.
+# ═══════════════════════════════════════════════════════════════
+
+* text=auto eol=lf
+
+*.sh   text eol=lf
+*.conf text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+
+*.woff2 binary
+*.png   binary
+*.jpg   binary
+*.webp  binary
+*.ico   binary
