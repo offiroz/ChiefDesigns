@@ -46,6 +46,11 @@ jobs:
       - name: התקנת חבילות
         run: npm ci
 
+      - name: משיכת תמונות תיק העבודות
+        # 14 מהתמונות נמשכות מ-Cloudinary ונפרסות כחלק מהאתר, כדי
+        # שהדפדפן לא יצטרך דומיין שלישי. נכשל בכוונה אם תמונה חסרה.
+        run: node scripts/fetch-project-images.mjs
+
       - name: בדיקת ניגודיות צבעים
         # נכשל אם צמד צבעים כלשהו יורד מתחת ל-WCAG AA.
         run: node scripts/check-contrast.mjs

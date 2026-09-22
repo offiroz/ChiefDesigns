@@ -7,3 +7,21 @@ google-credentials.json
 *.pem
 .DS_Store
 npm-debug.log*
+
+# תמונות תיק העבודות שנמשכות מ-Cloudinary בזמן הבנייה
+# (scripts/fetch-project-images.mjs). רק אלה — סקרינשוטים
+# שאתה מוסיף בעצמך לאותה תיקייה כן נכנסים לגיט.
+public/images/projects/kfar-tikva-names.webp
+public/images/projects/carmel-magazine.webp
+public/images/projects/alkaa-branding.webp
+public/images/projects/alkaa-social.webp
+public/images/projects/cozze-recipe-book.webp
+public/images/projects/chief-bot.webp
+public/images/projects/chef-julie.webp
+public/images/projects/space-cv.webp
+public/images/projects/event-rsvp.webp
+public/images/projects/tziluin.webp
+public/images/projects/music-teacher.webp
+public/images/projects/john-chimuchi.webp
+public/images/projects/protest-postcards.webp
+public/images/projects/music-shop-flyer.webp
