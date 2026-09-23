@@ -11,7 +11,7 @@ npm run build    # מייצר out/ — HTML סטטי
 npm run serve:static
 ```
 
-הבנייה דורשת חיבור לרשת בפעם הראשונה: `next/font` מוריד את Rubik, Heebo ו-Frank Ruhl Libre מגוגל **בזמן build** ומגיש אותם מהדומיין שלנו. בזמן ריצה אין שום בקשה לגוגל.
+הבנייה לא דורשת רשת לפונטים. שלושת הפונטים — Rubik, Heebo ו-Frank Ruhl Libre — יושבים ב-`public/fonts/` ונכנסים לגיט. פרטים ב"פונטים" למטה.
 
 ## מה כבר עובד
 
@@ -26,6 +26,7 @@ npm run serve:static
 - פריסה אוטומטית משני ברנצ'ים, עם rollback
 - Google Ads ו-Microsoft Clarity, נטענים afterInteractive ומופעלים לפי מזהה
 - CSP, favicon, וכל כותרות האבטחה
+- פונטים מאוחסנים עצמית, בלי תלות בגוגל בבנייה או בריצה
 
 ## החלטה שהוכרעה: אתר סטטי
 
@@ -57,12 +58,14 @@ src/
   app/          layout (RTL, פונטים, metadata, JSON-LD), page, 404, sitemap, robots
   components/   Header Hero Services Portfolio About Contact Footer + ui/Button
   data/         site.ts · services.ts · projects.ts   ← התוכן חי כאן, לא בקומפוננטות
-  lib/fonts.ts  שלושת הפונטים, self-hosted דרך next/font
+  lib/fonts.ts  רשימת ה-preload. ה-@font-face ב-styles/fonts.css
+  styles/fonts.css  נוצר על ידי scripts/fetch-fonts.ps1 — לא לערוך ביד
   app/{accessibility,privacy,terms}/  שלושת העמודים המשפטיים
 deploy/         nginx/ · server-setup.md · rollback.sh
 .github/        workflows/deploy.yml
 optional/       contact-route.ts
-scripts/        check-contrast.mjs · fetch-project-images.mjs
+scripts/        check-contrast.mjs · fetch-project-images.mjs · fetch-fonts.ps1
+public/fonts/   14 קבצי woff2, בגיט
 ```
 
 להוספת פרויקט לתיק: רשומה אחת ב-`src/data/projects.ts`. אין צורך לגעת בקומפוננטה.
@@ -78,6 +81,22 @@ scripts/        check-contrast.mjs · fetch-project-images.mjs
 7. **לינקדאין ו-Behance** — `site.social`, אם יש פרופילים. אינסטגרם ופייסבוק כבר מוגדרים.
 
 הצלבה מלאה מול רשימת התיקונים מ-25/06/2026 נמצאת בפרויקט, `chiefdesigns-fixes-crosscheck.md` — כל 29 הסעיפים סגורים.
+
+## פונטים
+
+שלושת הפונטים יושבים ב-`public/fonts/` — 14 קבצי woff2, 300KB בסך הכול, בגיט.
+
+היה כאן `next/font/google`, שהוריד אותם מגוגל **בכל בנייה**. ב-23.09 גוגל לא הייתה זמינה מהראנר והבנייה נפלה על שלושה `Failed to fetch`. עכשיו אין תלות: לא בזמן build, ולא בזמן ריצה.
+
+`src/styles/fonts.css` נוצר אוטומטית ומכיל את כללי ה-`@font-face`, כולל `unicode-range` לכל תת-קבוצה — דפדפן שמציג רק עברית לא מוריד את הקובץ הלטיני. שלושת קבצי העברית שנטענים בכל עמוד מקבלים `preload` ב-`layout.tsx` (`preloadedFonts` ב-`src/lib/fonts.ts`).
+
+להוספת משקל או פונט:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\fetch-fonts.ps1
+```
+
+הסקריפט קורא את `$families` שבתוכו, מוריד מגוגל וכותב מחדש את `fonts.css`. לערוך את הרשימה שם, להריץ, ולקמט את הקבצים החדשים. **לא לערוך את `fonts.css` ביד** — הוא נדרס בכל הרצה.
 
 ## תיק העבודות
 

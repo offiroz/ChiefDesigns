@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
-import { fontVariables } from '@/lib/fonts'
+import { preloadedFonts } from '@/lib/fonts'
 import { site } from '@/data/site'
 import { Analytics } from '@/components/Analytics'
+import '@/styles/fonts.css'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -79,7 +80,24 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="he" dir="rtl" className={fontVariables}>
+    <html lang="he" dir="rtl">
+      <head>
+        {/*
+          הפונטים מוגשים מהדומיין שלנו (ראו src/lib/fonts.ts).
+          preload רק לשלושת קבצי העברית שנטענים בכל עמוד — בלעדיו
+          הדפדפן מגלה אותם רק אחרי שהוא מפרסר את ה-CSS, וזה FOUT מיותר.
+        */}
+        {preloadedFonts.map((href) => (
+          <link
+            key={href}
+            rel="preload"
+            href={href}
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+        ))}
+      </head>
       <body>
         {/* דילוג לתוכן — ראשון בסדר ה-Tab, מופיע רק בפוקוס */}
         <a
