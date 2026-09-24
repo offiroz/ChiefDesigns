@@ -1,11 +1,14 @@
 import { Button } from '@/components/ui/Button'
 import { site } from '@/data/site'
+import { BrandMark } from '@/components/ui/BrandMark'
 
 export function Hero() {
   return (
     <section
       id="home"
       className="relative overflow-hidden bg-surface-navy pt-32 pb-24 sm:pt-40 sm:pb-32 on-navy"
+      /* הבמה שהפרלקס מודד ממנה את מיקום העכבר */
+      data-parallax-stage
     >
       {/*
         רקע דקורטיבי — כאן, ורק כאן, הפוקסיה הבהירה מותרת:
@@ -23,6 +26,8 @@ export function Hero() {
       />
 
       <div className="container-content relative">
+        <div className="flex flex-col-reverse items-start gap-10
+                        lg:flex-row lg:items-center lg:gap-16">
         <div className="max-w-3xl animate-fade-up">
           <p className="mb-4 font-display text-sm font-semibold uppercase
                         tracking-widest text-on-dark-teal">
@@ -53,11 +58,22 @@ export function Hero() {
         </div>
 
         {/*
-          TODO שלב 4: לוגו הפרלקס 2.5D נכנס כאן.
-          3 שכבות (גל רחוק / גל קרוב + קצף / דמות + גלשן) עם
-          CSS 3D perspective ומעקב עכבר. טוען אחרי הרינדור הראשוני,
-          ומכבד prefers-reduced-motion (מוגדר ב-globals.css).
+          סימן הגל, שלוש שכבות בפרלקס. שכבה קרובה זזה יותר מרחוקה —
+          זו פרספקטיבה אמיתית, והיפוך שלה מרגיש שגוי בלי שאפשר להסביר
+          למה. הנדנוד העצמאי הוא מה שרואים בנייד, בלי עכבר.
+          מכובה לגמרי ב-prefers-reduced-motion.
         */}
+        <div aria-hidden="true" className="shrink-0">
+          <BrandMark
+            size={300}
+            tone="dark"
+            parallax
+            /* הגודל נשלט ב-CSS ולא בתכונות ה-svg, כדי שיהיה רספונסיבי.
+               בנייד אין עכבר — מה שנשאר הוא הנדנוד העצמאי. */
+            className="h-40 w-40 sm:h-52 sm:w-52 lg:h-[300px] lg:w-[300px]"
+          />
+        </div>
+        </div>
       </div>
     </section>
   )

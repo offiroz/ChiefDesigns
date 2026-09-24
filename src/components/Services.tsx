@@ -1,4 +1,5 @@
 import { services } from '@/data/services'
+import { ServiceIcon } from '@/components/ui/ServiceIcon'
 
 export function Services() {
   return (
@@ -15,10 +16,16 @@ export function Services() {
                          transition-all duration-300
                          hover:-translate-y-1 hover:border-surface-fuchsia hover:shadow-lg"
             >
-              {/* האייקון דקורטיבי — הכותרת נושאת את המשמעות */}
-              <span aria-hidden="true" className="text-3xl">
-                {s.icon}
-              </span>
+              {/*
+                האייקון דקורטיבי — הכותרת נושאת את המשמעות.
+                צבע אחד, יורש מ-currentColor: טורקיז במנוחה, פוקסיה
+                ב-hover, באותו מעבר של המסגרת. שניהם עוברים AA.
+              */}
+              <ServiceIcon
+                name={s.icon}
+                className="text-ink-teal transition-colors duration-300
+                           group-hover:text-ink-fuchsia"
+              />
 
               <h3 className="mt-4 text-xl font-display font-bold text-ink-navy">
                 {s.title}

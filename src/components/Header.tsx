@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { site } from '@/data/site'
+import { BrandMark } from '@/components/ui/BrandMark'
 
 export function Header() {
   const [open, setOpen] = useState(false)
@@ -32,13 +33,14 @@ export function Header() {
         aria-label="ניווט ראשי"
         className="container-content flex h-20 items-center justify-between"
       >
-        <Link href="#home" className="flex items-center gap-3">
+        <Link href="#home" className="flex items-center gap-2.5">
           {/*
-            TODO שלב 4: כאן נכנס לוגו הפרלקס (גרסה קטנה, אנימציית hover).
-            עד שקובץ האילוסטרייטור מופרד ל-3 שכבות — לוגוטייפ טקסטואלי.
+            סימן הגל. דקורטיבי כאן — הלוגוטייפ שלידו נושא את השם,
+            ולכן אין טעם שקורא מסך יקריא אותו פעמיים.
           */}
+          <BrandMark size={40} tone="light" className="shrink-0" />
           <span className="font-logo text-2xl font-bold text-ink-fuchsia">
-            Chief Designs
+            {site.name}
           </span>
         </Link>
 

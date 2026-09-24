@@ -1,6 +1,9 @@
+import type { ServiceIconName } from '@/components/ui/ServiceIcon'
+
 export type Service = {
   id: string
-  icon: string
+  /** שם האייקון ברישום שב-ServiceIcon.tsx. הציור עצמו חי שם, לא כאן. */
+  icon: ServiceIconName
   title: string
   body: string
 }
@@ -9,37 +12,37 @@ export type Service = {
 export const services: Service[] = [
   {
     id: 'branding',
-    icon: '🎨',
+    icon: 'shapes',
     title: 'עיצוב ומיתוג',
     body: 'לוגו, זהות ויזואלית וחומרי מותג שמספרים את הסיפור שלכם — ונשארים בזיכרון.',
   },
   {
     id: 'websites',
-    icon: '💻',
+    icon: 'window',
     title: 'אתרים',
     body: 'אתרי תדמית ומכירה שבנויים לתוצאות: מהירים, ברורים, ומביאים לקוחות.',
   },
   {
     id: 'social',
-    icon: '📱',
+    icon: 'bubbles',
     title: 'ניהול תוכן לרשתות',
     body: 'תוכן חודשי בנוי מראש, מעוצב ומתוזמן — כדי שהעמוד שלכם ידבר גם כשאתם לא זמינים.',
   },
   {
     id: 'automation',
-    icon: '⚡',
+    icon: 'flow',
     title: 'אוטומציות ובוטים',
     body: 'מוואטסאפ ועד תהליכים פנימיים — אוטומציה שחוסכת לכם שעות בשבוע.',
   },
   {
     id: 'ai-tools',
-    icon: '🤖',
+    icon: 'chip',
     title: 'כלי AI מותאמים אישית',
     body: 'כלים דיגיטליים שנבנים בול למה שאתם צריכים, לא תבנית גנרית.',
   },
   {
     id: 'strategy',
-    icon: '🚀',
+    icon: 'target',
     title: 'אסטרטגיה דיגיטלית',
     body: 'תכנון שמחבר בין כל השירותים למטרה אחת — נוכחות דיגיטלית שעובדת בשבילכם.',
   },
