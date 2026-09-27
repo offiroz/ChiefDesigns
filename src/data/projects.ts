@@ -140,14 +140,16 @@ export const projects: Project[] = [
     approved: true, // היה מוצג באתר הישן
   },
   {
-    id: 'alumot-beomer',
-    title: 'אתר עמותת אלומות בעומר',
+    id: 'alumot-social',
+    title: 'לוח תוכן שנתי לרשתות',
     client: 'עמותת אלומות בעומר',
     kind: 'client',
-    tags: ['אתרים'],
-    summary: 'אתר תדמית לעמותה.',
-    image: null,
-    imageAlt: 'עמוד הבית של אתר עמותת אלומות בעומר',
+    tags: ['סושיאל', 'עיצוב גרפי'],
+    summary:
+      'למעלה מארבעים פוסטים מתוכננים לשנה: פוסטים, קרוסלות, סטוריז ורילים, כל אחד עם תאריך, סדרה וקופי מוכן. עמותה שמציידת מתגייסים בתיק ציוד מלא.',
+    image: '/images/projects/alumot-social.webp',
+    imageAlt:
+      'שלושה פוסטים מעוצבים מלוח התוכן של אלומות בעומר — שער קרוסלה, פוסט ציטוט ושקף סיום עם הלוגו',
     href: null,
     featured: false,
     approved: true, // אושר על ידי העמותה, 27.09.2026
