@@ -61,8 +61,8 @@ export const projects: Project[] = [
     tags: ['מיתוג', 'אתרים'],
     summary:
       'קונספט אישי בעיצוב מקצה לקצה: זהות מותג, אתר, אפליקציה ומערכת עיצוב מלאה.',
-    image: null, // TODO: סקרינשוט מהוויירפריימים
-    imageAlt: 'מסכי האפליקציה ומערכת העיצוב של 4Dawn',
+    image: '/images/projects/4dawn.webp',
+    imageAlt: 'עמוד הבית של 4Dawn — הירו עם כרטיס ההרשמה ופס הנתונים מתחתיו',
     href: null,
     featured: true,
     approved: true,

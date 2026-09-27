@@ -48,8 +48,8 @@ export const site = {
   analytics: {
     /* הועבר מהאתר הישן */
     googleAds: 'AW-17466147922',
-    /* TODO: מזהה הפרויקט מ-clarity.microsoft.com → Settings → Overview */
-    clarity: '',
+    /* מזהה הפרויקט מ-clarity.microsoft.com. נטען רק בפרודקשן — ראו Analytics.tsx */
+    clarity: 'ssi5g800j7',
   },
 
   /*
